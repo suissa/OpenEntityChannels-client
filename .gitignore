@@ -1,2 +1,2 @@
-thunder-tests
-.DS_Store
+node_modules/
+dist/
