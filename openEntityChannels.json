@@ -1,0 +1,121 @@
+{
+  "protocol": "EntityCommunicationProtocol",
+  "version": "0.1.0",
+  "defaults": {
+    "enabled": true,
+    "body": "entitySchema",
+    "requiredHeaders": ["X-API-KEY", "X-DPOP-TOKEN"],
+    "idleTtlMs": 3600000,
+    "responseIdentity": {
+      "alwaysReturn": ["id", "canonicalLabel"],
+      "uiUses": "canonicalLabel",
+      "systemUses": "id"
+    },
+    "hashing": {
+      "algorithm": "hmacSha256",
+      "secretRef": "ECP_ROUTE_SECRET",
+      "input": ["apiKey", "entityName", "entityId"]
+    },
+    "observability": {
+      "enabled": true,
+      "ui": { "path": "/{entity}/{hash}/observability/ui", "stream": "sse" },
+      "agents": { "path": "/{entity}/{hash}/observability/agents", "stream": "ndjson" }
+    },
+    "lease": {
+      "mode": "linearAutoDestroy",
+      "idleTtlMs": 3600000,
+      "destroyOnExpire": true,
+      "zeroizeSecrets": true
+    }
+  },
+  "entities": {
+    "Paciente": {
+      "schemaRef": "./Paciente/Paciente.entity.schema.json",
+      "idField": "pacienteId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7001, "base": "/paciente/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "updateContact", "method": "PATCH", "path": "/contact" }, { "name": "deactivate", "method": "DELETE", "path": "/deactivate" } ] },
+        "websocket": { "enabled": true, "port": 7101, "base": "/paciente/{hash}" },
+        "grpc": { "enabled": true, "port": 7201, "service": "PacienteGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "paciente" }
+      }
+    },
+    "Medico": {
+      "schemaRef": "./Medico/Medico.entity.schema.json",
+      "idField": "medicoId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7002, "base": "/medico/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "updateProfile", "method": "PUT", "path": "/profile" } ] },
+        "websocket": { "enabled": true, "port": 7102, "base": "/medico/{hash}" },
+        "grpc": { "enabled": true, "port": 7202, "service": "MedicoGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "medico" }
+      }
+    },
+    "Consulta": {
+      "schemaRef": "./Consulta/Consulta.entity.schema.json",
+      "idField": "consultaId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7003, "base": "/consulta/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "confirm", "method": "POST", "path": "/confirm" }, { "name": "cancel", "method": "POST", "path": "/cancel" }, { "name": "reschedule", "method": "POST", "path": "/reschedule" } ] },
+        "websocket": { "enabled": true, "port": 7103, "base": "/consulta/{hash}" },
+        "grpc": { "enabled": true, "port": 7203, "service": "ConsultaGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "consulta" }
+      }
+    },
+    "Documento": {
+      "schemaRef": "./Documento/Documento.entity.schema.json",
+      "idField": "documentoId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7004, "base": "/documento/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "attachToConsulta", "method": "POST", "path": "/attach" } ] },
+        "websocket": { "enabled": true, "port": 7104, "base": "/documento/{hash}" },
+        "grpc": { "enabled": true, "port": 7204, "service": "DocumentoGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "documento" }
+      }
+    },
+    "Pagamento": {
+      "schemaRef": "./Pagamento/Pagamento.entity.schema.json",
+      "idField": "pagamentoId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7005, "base": "/pagamento/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "markPaid", "method": "POST", "path": "/markPaid" }, { "name": "refund", "method": "POST", "path": "/refund" } ] },
+        "websocket": { "enabled": true, "port": 7105, "base": "/pagamento/{hash}" },
+        "grpc": { "enabled": true, "port": 7205, "service": "PagamentoGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "pagamento" }
+      }
+    },
+    "WhatsAppMessage": {
+      "schemaRef": "./WhatsApp/Message/WhatsAppMessage.entity.schema.json",
+      "idField": "messageId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7006, "base": "/whatsappmessage/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "appendToHistorico", "method": "POST", "path": "/appendToHistorico" } ] },
+        "websocket": { "enabled": true, "port": 7106, "base": "/whatsappmessage/{hash}" },
+        "grpc": { "enabled": true, "port": 7206, "service": "WhatsAppMessageGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "whatsappMessage" }
+      }
+    },
+    "ChatbotAtendenteVirtual": {
+      "schemaRef": "./ChatbotAtendenteVirtual/ChatbotAtendenteVirtual.entity.schema.json",
+      "idField": "chatbotId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7007, "base": "/chatbotatendentevirtual/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "handleIntent", "method": "POST", "path": "/intent" } ] },
+        "websocket": { "enabled": true, "port": 7107, "base": "/chatbotatendentevirtual/{hash}" },
+        "grpc": { "enabled": true, "port": 7207, "service": "ChatbotAtendenteVirtualGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "chatbotAtendenteVirtual" }
+      }
+    },
+    "HistoricoAtendimento": {
+      "schemaRef": "./DoctorPatientRelation/HistoricoAtendimento/HistoricoAtendimento.entity.schema.json",
+      "idField": "historicoId",
+      "canonicalLabel": "canonicalLabel",
+      "channels": {
+        "rest": { "enabled": true, "port": 7008, "base": "/historicoatendimento/{hash}", "routes": [ { "name": "receivePayload", "method": "POST" }, { "name": "getCurrentState", "method": "GET" }, { "name": "appendMessage", "method": "POST", "path": "/appendMessage" }, { "name": "linkConsulta", "method": "POST", "path": "/linkConsulta" }, { "name": "summarize", "method": "POST", "path": "/summarize" } ] },
+        "websocket": { "enabled": true, "port": 7108, "base": "/historicoatendimento/{hash}" },
+        "grpc": { "enabled": true, "port": 7208, "service": "HistoricoAtendimentoGateway" },
+        "mcp": { "enabled": true, "visibility": "internal", "name": "historicoAtendimento" }
+      }
+    }
+  }
+}
