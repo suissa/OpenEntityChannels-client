@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Multi-channel interface generator for the EntityCommunicationProtocol",
   "scripts": {
+    "start": "ts-node src/serve.ts",
     "build": "tsc",
     "generate": "ts-node src/index.ts",
     "generate:prod": "npm run build && node dist/index.js"
