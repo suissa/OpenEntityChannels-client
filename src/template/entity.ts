@@ -69,14 +69,14 @@ export function renderEntityCard(entityName: string, entity: Entity): string {
   const tabButtonsHTML  = enabledChannels.map((type, i) => renderChannelTabButton(type, entityId, i === 0)).join("");
   const channelPanelsHTML = enabledChannels.map((type, i) => renderChannelContentPanel(type, entityName, entity, i === 0)).join("");
   return `
-    <div class="entity-card bg-white rounded-2xl shadow-sm border border-gray-200 mb-4 overflow-hidden animate__animated animate__fadeInUp" id="entity-${entityId}">
-      <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors select-none"
+    <div class="entity-card bg-white rounded-2xl shadow-sm border border-slate-200 mb-4 overflow-hidden animate__animated animate__fadeInUp" id="entity-${entityId}">
+      <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-slate-50 transition-colors select-none"
            onclick="toggleEntityCardOpenOrClosed('${entityId}')">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">${entityName.charAt(0)}</div>
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">${entityName.charAt(0)}</div>
           <div>
-            <h3 class="font-semibold text-gray-800">${entityName}</h3>
-            <div class="text-xs text-gray-400 font-mono mt-0.5">${entity.idField}</div>
+            <div class="flex items-center gap-2"><h3 class="font-semibold text-slate-800">${entityName}</h3><span class="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">active</span></div>
+            <div class="text-xs text-slate-400 font-mono mt-1">${entity.idField} · ${entity.schemaRef}</div>
           </div>
         </div>
         <div class="flex items-center gap-3">
@@ -86,8 +86,8 @@ export function renderEntityCard(entityName: string, entity: Entity): string {
           </svg>
         </div>
       </div>
-      <div id="entity-body-${entityId}" class="hidden border-t border-gray-100">
-        <div class="flex border-b border-gray-200 bg-gray-50 px-2 overflow-x-auto">${tabButtonsHTML}</div>
+      <div id="entity-body-${entityId}" class="hidden border-t border-slate-100">
+        <div class="flex border-b border-slate-200 bg-slate-50 px-2 overflow-x-auto">${tabButtonsHTML}</div>
         ${channelPanelsHTML}
       </div>
     </div>
