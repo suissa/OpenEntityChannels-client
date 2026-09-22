@@ -1,7 +1,7 @@
 {
-  "name": "openentitychannels-swagger",
+  "name": "openentitychannels-client",
   "version": "0.1.0",
-  "description": "Multi-channel interface generator for the EntityCommunicationProtocol",
+  "description": "Local interactive explorer generator for OpenEntityChannels contracts",
   "scripts": {
     "build": "tsc",
     "generate": "ts-node src/index.ts",

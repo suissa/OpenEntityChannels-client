@@ -154,7 +154,8 @@ function clearAllWebSocketMessages(wsId) {
 function filterEntitiesBySearchTerm(searchTerm) {
   const t = searchTerm.toLowerCase();
   document.querySelectorAll(".entity-card").forEach(card => {
-    card.style.display = card.id.replace("entity-", "").toLowerCase().includes(t) ? "" : "none";
+    const haystack = card.textContent.toLowerCase();
+    card.style.display = haystack.includes(t) ? "" : "none";
   });
 }
 

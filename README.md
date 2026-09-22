@@ -1,66 +1,64 @@
-<p align="center">
-  <img src="images/thunder-icon.png" width="120" height="120" />
-</p>
+# OpenEntityChannels Client
 
-# Thunder Client
-![Visual Studio Marketplace Installs](https://vsmarketplacebadges.dev/installs-short/rangav.vscode-thunder-client.svg)
-![Visual Studio Version](https://vsmarketplacebadges.dev/version-short/rangav.vscode-thunder-client.svg)
-![NPM Version](https://img.shields.io/npm/v/%40thunderclient%2Fcli?label=CLI)
-[![Discord Badge](https://img.shields.io/discord/1044985063802163230?color=5865F2&label=Discord&logo=discord&logoColor=white&style=flat)](https://discord.gg/yw6UsfwrkH)
+OpenEntityChannels Client generates a local, interactive explorer from an `openEntityChannels.json` contract. It presents entities, REST routes, WebSocket streams, gRPC services, MCP bindings, authentication defaults and observability endpoints in one technical interface.
 
-Thunder Client is a lightweight REST API client for [VS Code](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) and [JetBrains](https://plugins.jetbrains.com/plugin/31431-thunder-client), designed with a focus on **simplicity, clean design, and local storage**. You can report any bugs or feature requests here.
+The generated page is intentionally dependency-light: the generator is TypeScript, while the output is a self-contained HTML document that can be opened directly in a browser.
 
-- Featured on Product Hunt - [Product Hunt](https://www.producthunt.com/posts/thunder-client)
-- Featured in the "20 Fan Favorite Extensions" for [VS Code](https://www.youtube.com/watch?v=mI5My0cBTv4)
-- Website - [www.thunderclient.com](https://www.thunderclient.com)
-- Extension - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client)
-- Documentation - [https://docs.thunderclient.com](https://docs.thunderclient.com/)
+## What it provides
 
-#### Story behind Thunder Client
+- Entity-first navigation with search and expand/collapse controls.
+- Channel tabs for REST, WebSocket, gRPC and MCP.
+- REST “Try it out” forms with request headers, JSON body and response viewer.
+- WebSocket connect, disconnect, send and live message terminal.
+- Protocol-level summary for route hashing, leases, required headers and observability.
+- A layout designed for local contract inspection, without a backend requirement.
 
-- Read Launch Blog Post on [Medium](https://rangav.medium.com/thunder-client-alternative-to-postman-68ee0c9486d6)
+## Quick start
 
-#### Milestones
+```bash
+npm install
+npm run generate
+```
 
-- The extension was **launched** on March 31st, 2021
-- **500K** downloads on Dec 20th, 2021
-- **1 Million** downloads on July 13th, 2022
-- [View All Milestones](https://www.thunderclient.com/about)
+The default command reads `./openEntityChannels.json` and writes `./public/index.html`.
 
-#### Innovations
+Custom input and output paths are supported:
 
-- First to introduce GUI based **API Client for VS Code**.
-- First to introduce **100% local storage** API Client.
-- First to introduce **Scriptless Testing**.
-- First to introduce an **advanced CLI** that runs Requests, Collections and cURL commands.
-- More to come...
+```bash
+npm run generate -- ./contracts/my-protocol.json ./public/my-protocol.html
+```
 
-#### Follow Us for Updates
+For a production-style run:
 
-&nbsp;[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/thunder_client)
-&nbsp; &nbsp; [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/thunderclient/)
+```bash
+npm run generate:prod
+```
 
-<a name="usage"></a>
+## Contract shape
 
-## How to Use
+The generator consumes the protocol document described in [`openEntityChannels.json`](./openEntityChannels.json). Each entity declares its schema reference, identity field and enabled communication channels. REST routes are rendered as executable request rows; WebSocket, gRPC and MCP bindings are rendered as channel-specific contract panels.
 
-- Install the extension, click the Thunder Client icon on the Action Bar.
-- From the sidebar click `New Request` button to test API
-- Video: [youtube.com/watch?v=NKZ0ahNbmak](https://youtu.be/NKZ0ahNbmak?t=3)
+## Security note
 
-<img width="850" alt="Thunder Client" src="https://raw.githubusercontent.com/thunderclient/thunder-client-support/refs/heads/main/images/thunder-client-v2.png">
+The explorer runs locally, but the generated REST form can send requests to the URL entered by the operator. Use test credentials and a trusted protocol definition. The default headers shown by the explorer are `X-API-KEY` and `X-DPOP-TOKEN`; they are never persisted by the generator.
 
-<a name="features"></a>
+## Project layout
 
-## Main Features
+```text
+src/
+  index.ts                 CLI entrypoint
+  parser.ts                Protocol file reader
+  types.ts                 Contract types
+  template/
+    page.ts                Full HTML shell and navigation
+    header.ts              Protocol overview header
+    entity.ts              Entity cards and channel tabs
+    channels/              REST, WebSocket, gRPC and MCP panels
+    scripts.ts             Embedded browser interactions
+openEntityChannels.json    Example protocol contract
+docs/                      Short documentation entrypoint
+```
 
-- **Lightweight** and easy to use REST API Client.
-- Supports **Collections and Environment variables**.
-- **Scriptless Testing:** Easily test API responses with a GUI-based interface.
-- **Local Storage:** The extension saves all data locally on the user's device.
-- **Git Sync:** Save requests data in your Git repository for team collaboration.
-- **Advanced CLI:** Run requests, collections and cURL commands from the terminal.
+## License
 
-## Documentation (NEW)
-
-- We're excited to launch our new documentation site - https://docs.thunderclient.com
+See [`LICENSE.txt`](./LICENSE.txt).
